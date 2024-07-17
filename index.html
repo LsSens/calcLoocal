@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudo de Conversão de Marketplace</title>
+    <title>Calculadora de conversão marketplace</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -19,21 +19,91 @@
         .container {
             flex-grow: 1;
         }
+
+        .highlight {
+            animation: highlight 1s ease;
+        }
+        @keyframes highlight {
+            from { background-color: red; }
+            to { background-color: white; }
+        }
     </style>
 </head>
 
 <body>
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalLabel">Por favor, insira suas informações</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userInfoForm">
+                    <div class="mb-3">
+                        <label for="userName" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="userName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="userEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="userPhone" class="form-label">Número de Telefone</label>
+                        <input type="text" class="form-control" id="userPhone" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="resulModal" tabindex="-1" aria-labelledby="resulModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resulModalLabel">Resultado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="diferencaComissionamento">Diferença de Comissionamento:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="diferencaComissionamento" value="0" readonly disabled>
+                        <span class="input-group-text" id="basic-addon1">%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="economiaBruta">Economia Bruta:</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" class="form-control money" id="economiaBruta" value="0" readonly disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="economiaLiquida">Economia Líquida:</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" class="form-control money" id="economiaLiquida" value="0" readonly disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
     <div class="container mt-4">
         <div class="row justify-content-between align-items-center">
             <div class="col-12 col-md-8">
-                <h1 class="text-center text-md-start">Estudo de Conversão de Marketplace</h1>
+                <h1 class="text-center text-md-start">Calculadora de conversão marketplace</h1>
             </div>
             <div class="col-12 col-md-4 text-center text-md-end">
                 <img class="w-100" style="max-width: 200px;" src="./imgs/logo.png" alt="Logo">
             </div>
         </div>
 
-                <div class="card mt-4">
+        <div class="card mt-4">
             <h5 class="card-header">Insira os dados da entrega</h5>
             <div class="card-body">
                 <div class="row">
@@ -41,15 +111,7 @@
                         <div class="form-group">
                             <label for="distanciaKM">Distancia (KM):</label>
                             <div class="input-group">
-                                <select class="form-control km" id="distanciaKM">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                </select>
+                                <input type="number" class="form-control km" id="distanciaKM" value="1" min="1">
                                 <span class="input-group-text" id="basic-addon1">KM</span>
                             </div>
                         </div>
@@ -63,7 +125,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="custoLoocal">Custo Entrega Loocal:</label>
+                            <label for="custoLoocal">Novo Custo:</label>
                             <div class="input-group">
                                 <span class="input-group-text" id="basic-addon1">R$</span>
                                 <input type="text" class="form-control money km" id="custoLoocal" value="0">
@@ -78,11 +140,15 @@
                         </div>
                     </div>
                 </div>
+                <button id="addCard" class="btn btn-primary mt-4">Adicionar</button>
             </div>
         </div>
 
+        <div id="cardsContainer" class="row mt-4">
+        </div>
+
         <div class="card mt-4">
-            <h5 class="card-header">Entradas</h5>
+            <h5 class="card-header">Dados da sua loja</h5>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -106,22 +172,10 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Variação na média de custo em entregas?</label>
+                            <label>Variação na média de custo em entregas</label>
                             <div class="d-flex gap-3">
-                                <div class="form-check">
-                                    <input class="form-check-input entradas" type="radio" name="variacao" id="nao" checked>
-                                    <label class="form-check-label" for="nao">
-                                        Não
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input entradas" type="radio" name="variacao" id="sim">
-                                    <label class="form-check-label" for="sim ">
-                                        Sim
-                                    </label>
-                                </div>
                             </div>
-                            <div class="input-group" style="display: none;" id="variacaoInputGroup">
+                            <div class="input-group" id="variacaoInputGroup">
                                 <span class="input-group-text" id="basic-addon1">R$</span>
                                 <input type="text" class="form-control money entradas" id="valorVariacao" value="0">
                             </div>
@@ -140,38 +194,9 @@
                                 <span class="input-group-text" id="basic-addon1">%</span>
                             </div>
                         </div>
-                        <div class="form-group pt-2 d-flex justify-content-end">
-                            <button class="btn btn-primary">Calcular</button>
-                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <div class="card mt-4">
-            <h5 class="card-header">Resultados</h5>
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="diferencaComissionamento">Diferença de Comissionamento:</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="diferencaComissionamento" value="0" readonly disabled>
-                        <span class="input-group-text" id="basic-addon1">%</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="economiaBruta">ECONOMIA BRUTA:</label>
-                    <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">R$</span>
-                        <input type="text" class="form-control money" id="economiaBruta" value="0" readonly disabled>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="economiaLiquida">ECONOMIA LÍQUIDA:</label>
-                    <div class="input-group">
-                        <span class="input-group-text" id="basic-addon1">R$</span>
-                        <input type="text" class="form-control money" id="economiaLiquida" value="0" readonly disabled>
-                    </div>
-                </div>
+                <button class="btn btn-primary" id="btn-calc">Calcular</button>
             </div>
         </div>
     </div>
