@@ -82,9 +82,7 @@ $(document).ready(function() {
             var cardBody = $('<div>').addClass('card-body');
 
             var cardContent = `
-                <p>Distancia: ${distanciaKM} KM</p>
-                <p>Custo Atual: R$ ${custoAtual}</p>
-                <p>Novo Custo: R$ ${custoLoocal}</p>
+                <p>Distancia: ${distanciaKM} KM, Custo Atual: R$ ${custoAtual}, Novo Custo: R$ ${custoLoocal}</p>
                 <p>Diferença valor da entrega: R$ ${diferencaEntrega}</p>
             `;
 
