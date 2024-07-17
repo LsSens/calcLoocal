@@ -48,7 +48,7 @@ $(document).ready(function() {
         var economiaBruta = ticketMedio * entregasMes * (diferencaComissionamento / 100);
         var economiaLiquida = economiaBruta - valorVariacao * entregasMes;
 
-        $('#diferencaComissionamento').val(diferencaComissionamento);
+        $('#diferencaComissionamento').val(diferencaComissionamento.toFixed(2));
         $('#economiaBruta').val(economiaBruta.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $('#economiaLiquida').val(economiaLiquida.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     }
@@ -95,6 +95,11 @@ $(document).ready(function() {
             $('#cardsContainer').append(newCardCol);
 
             sortCards();
+
+            $('#distanciaKM').val(1);
+            $('#custoAtual').val(0);
+            $('#custoLoocal').val(0);
+            $('#diferencaEntrega').val(0);
         }
     });
 
@@ -114,8 +119,8 @@ $(document).ready(function() {
     $('#userInfoForm').on('submit', function(e) {
         e.preventDefault();
         $('#userModal').modal('hide');
-        $('#resulModal').modal('show');
         calcularEntradas();
+        $('#resulModal').modal('show');
     });
 
 });
