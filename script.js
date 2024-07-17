@@ -1,52 +1,50 @@
 $(document).ready(function() {
-    $('#custoAtual1, #custoEntregaLocal1, #custoAtual2, #custoEntregaLocal2, #custoAtual3, #custoEntregaLocal3, #custoAtual4, #custoEntregaLocal4, #custoAtual5, #custoEntregaLocal5, #custoAtual6, #custoEntregaLocal6, #custoAtual7, #custoEntregaLocal7').mask('000.000.000.000.000,00', {reverse: true});
-    $('#ticketMedio').mask('000.000.000.000.000,00', {reverse: true});
-    $('#reducaoComissao').mask('##0,00', {reverse: true});
-    
-    function calcular() {
-        var ticketMedio = parseFloat($('#ticketMedio').val().replace(/\./g, '').replace(',', '.'));
-        var reducaoComissao = parseFloat($('#reducaoComissao').val().replace(',', '.'));
-        var totalEntregas = parseFloat($('#totalEntregas').val().replace(/\./g, '').replace(',', '.'));
-        var variacaoMedia = parseFloat($('#variacaoMedia').val().replace(',', '.'));
+    $('.money').mask('000.000.000.000.000,00', {reverse: true});
+    $('.porcent').mask('##0,00', {reverse: true});
+    $('input[name="variacao"]').change(toggleVariacaoInput);
+    $('#selectOption').change(calcularEntradas);
 
-        if (isNaN(ticketMedio) || isNaN(reducaoComissao) || isNaN(totalEntregas) || isNaN(variacaoMedia)) {
-            return;
+    function toggleVariacaoInput() {
+        $('#variacaoInputGroup').toggle($('#sim').is(':checked'));
+    }
+
+    function calcularKM() {
+        var distanciaKM = $('#distanciaKM').val();
+        var custoAtual = parseFloat($('#custoAtual').val().replace(/\./g, '').replace(',', '.'));
+        var custoLoocal = parseFloat($('#custoLoocal').val().replace(/\./g, '').replace(',', '.'));
+
+        var difKM = custoLoocal - custoAtual;
+
+        $('#diferencaEntrega').val(difKM.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    }
+
+    function calcularEntradas() {
+        var taxaMarketplace = parseFloat($('#taxaMarketplace').val().replace(',', '.'));
+        var taxaFullservice = parseFloat($('#taxaFullservice').val().replace(',', '.'));
+        var valorVariacao = parseFloat($('#valorVariacao').val().replace(/\./g, '').replace(',', '.'));
+        var entregasMes = $('#entregasMes').val();
+        if ($('#selectOption').val() == '2') {
+            var ticketMedio = parseFloat($('#ticketMedio').val().replace(/\./g, '').replace(',', '.') / $('#entregasMes').val());
+        } else {
+            var ticketMedio = parseFloat($('#ticketMedio').val().replace(/\./g, '').replace(',', '.'));
         }
-        
-        var faturamento = ticketMedio * totalEntregas;
-        var economiaBruta = faturamento * (reducaoComissao / 100);
-        var economiaLiquida = economiaBruta - (variacaoMedia * totalEntregas);
-        var porcentagemGanho = (economiaLiquida * 100) / faturamento;
-        
-        $('#faturamento').val(faturamento.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        // var faturamento = parseFloat($('#ticketMedio').val().replace(/\./g, '').replace(',', '.'));
+
+        var diferencaComissionamento = taxaMarketplace - taxaFullservice;
+        var economiaBruta = ticketMedio * entregasMes * (diferencaComissionamento / 100);
+        var economiaLiquida = economiaBruta - valorVariacao * entregasMes;
+
+        $('#diferencaComissionamento').val(diferencaComissionamento);
         $('#economiaBruta').val(economiaBruta.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
         $('#economiaLiquida').val(economiaLiquida.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-        $('#porcentagemGanho').val(porcentagemGanho.toFixed(2).replace('.', ','));
     }
 
-    function calcularDiferencaCusto() {
-        for (var i = 1; i <= 7; i++) {
-            var custoAtual = parseFloat($('#custoAtual' + i).val().replace(/\./g, '').replace(',', '.'));
-            var custoEntregaLocal = parseFloat($('#custoEntregaLocal' + i).val().replace(/\./g, '').replace(',', '.'));
-
-            if (isNaN(custoAtual) || isNaN(custoEntregaLocal)) {
-                $('#diferencaCusto' + i).val('0,00');
-                continue;
-            }
-
-            var diferenca = custoEntregaLocal - custoAtual;
-            $('#diferencaCusto' + i).val(diferenca.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-        }
-    }
-
-    calcular();
-    calcularDiferencaCusto();
-
-    $('#ticketMedio, #reducaoComissao, #totalEntregas, #variacaoMedia').on('input', function() {
-        calcular();
+    $('.entradas').on('input', function(){
+        calcularEntradas();
     });
 
-    $('#custoAtual1, #custoEntregaLocal1, #custoAtual2, #custoEntregaLocal2, #custoAtual3, #custoEntregaLocal3, #custoAtual4, #custoEntregaLocal4, #custoAtual5, #custoEntregaLocal5, #custoAtual6, #custoEntregaLocal6, #custoAtual7, #custoEntregaLocal7').on('input', function() {
-        calcularDiferencaCusto();
+    $('.km').on('input', function() {
+        calcularKM();
     });
+
 });

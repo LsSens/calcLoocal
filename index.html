@@ -10,6 +10,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="./script.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 
 <body>
@@ -23,39 +33,47 @@
             </div>
         </div>
 
-        <div class="card mt-4">
-            <h5 class="card-header">Ticket Médio por Delivery</h5>
+                <div class="card mt-4">
+            <h5 class="card-header">Insira os dados da entrega</h5>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="ticketMedio">Ticket Médio:</label>
+                            <label for="distanciaKM">Distancia (KM):</label>
                             <div class="input-group">
-                                <span class="input-group-text" id="basic-addon1">R$</span>
-                                <input type="text" class="form-control money" id="ticketMedio" value="70,00">
+                                <select class="form-control km" id="distanciaKM">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                </select>
+                                <span class="input-group-text" id="basic-addon1">KM</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="faturamento">Faturamento:</label>
+                            <label for="custoAtual">Custo Atual:</label>
                             <div class="input-group">
                                 <span class="input-group-text" id="basic-addon1">R$</span>
-                                <input type="text" class="form-control money" id="faturamento" readonly>
+                                <input type="text" class="form-control money km" id="custoAtual" value="0">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="reducaoComissao">Redução em Comissão:</label>
+                            <label for="custoLoocal">Custo Entrega Loocal:</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="reducaoComissao" value="5">
-                                <span class="input-group-text" id="basic-addon1">%</span>
+                                <span class="input-group-text" id="basic-addon1">R$</span>
+                                <input type="text" class="form-control money km" id="custoLoocal" value="0">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="economiaBruta">Economia Bruta nas Taxas:</label>
+                            <label for="diferencaEntrega">Diferença valor da entrega:</label>
                             <div class="input-group">
                                 <span class="input-group-text" id="basic-addon1">R$</span>
-                                <input type="text" class="form-control money" id="economiaBruta" readonly>
+                                <input type="text" class="form-control money km" id="diferencaEntrega" readonly disabled value="0">
                             </div>
                         </div>
                     </div>
@@ -64,254 +82,101 @@
         </div>
 
         <div class="card mt-4">
-            <h5 class="card-header">Comparação em Preço de Entrega</h5>
+            <h5 class="card-header">Entradas</h5>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="totalEntregas">Total de Entregas:</label>
+                            <label for="entregasMes">Entregas Mês:</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="totalEntregas" value="1200">
+                                <input type="number" class="form-control entradas" id="entregasMes" value="0">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="variacaoMedia">Variação na Média de Custo em Entregas:</label>
-                            <div class="input-group">
+                            <label for="ticketMedio">Selecione:</label>
+                            <select class="form-control" id="selectOption">
+                                <option value="1">Ticket Médio  </option>
+                                <option value="2">Faturamento Delivery</option>
+                            </select>
+                            <div class="input-group pt-1">
                                 <span class="input-group-text" id="basic-addon1">R$</span>
-                                <input type="text" class="form-control money" id="variacaoMedia" value="0,7">
+                                <input type="text" class="form-control money entradas" id="ticketMedio" value="0">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="economiaLiquida">Economia Líquida:</label>
-                            <div class="input-group">
+                            <label>Variação na média de custo em entregas?</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input entradas" type="radio" name="variacao" id="nao" checked>
+                                    <label class="form-check-label" for="nao">
+                                        Não
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input entradas" type="radio" name="variacao" id="sim">
+                                    <label class="form-check-label" for="sim ">
+                                        Sim
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="input-group" style="display: none;" id="variacaoInputGroup">
                                 <span class="input-group-text" id="basic-addon1">R$</span>
-                                <input type="text" class="form-control money" id="economiaLiquida" readonly>
+                                <input type="text" class="form-control money entradas" id="valorVariacao" value="0">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="porcentagemGanho">% Ganho sobre Faturamento:</label>
+                            <label for="taxaMarketplace">Taxa de Marketplace:</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="porcentagemGanho" readonly>
+                                <input type="text" class="form-control porcent entradas" id="taxaMarketplace" value="0">
                                 <span class="input-group-text" id="basic-addon1">%</span>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="taxaFullservice">Taxa de Fullservice:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control porcent entradas" id="taxaFullservice" value="0">
+                                <span class="input-group-text" id="basic-addon1">%</span>
+                            </div>
+                        </div>
+                        <div class="form-group pt-2 d-flex justify-content-end">
+                            <button class="btn btn-primary">Calcular</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         
-    <div class="card mt-3">
-        <h5 class="card-header">Distância da Rota - Comparação de Custos de Entrega</h5>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">1 KM</h6>
-                            <div class="form-group mb-2">
-                                <label for="custoAtual1">Custo Atual:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoAtual1" value="7,99">
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="custoEntregaLocal1">Custo Entrega Local:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoEntregaLocal1" value="7,99" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="diferencaCusto1">Diferença no Valor da Entrega:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="diferencaCusto1" readonly>
-                                </div>
-                            </div>
-                        </div>
+        <div class="card mt-4">
+            <h5 class="card-header">Resultados</h5>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="diferencaComissionamento">Diferença de Comissionamento:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="diferencaComissionamento" value="0" readonly disabled>
+                        <span class="input-group-text" id="basic-addon1">%</span>
                     </div>
                 </div>
-                <div class="col-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">2 KM</h6>
-                            <div class="form-group mb-2">
-                                <label for="custoAtual2">Custo Atual:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoAtual2" value="8,99">
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="custoEntregaLocal2">Custo Entrega Local:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoEntregaLocal2" value="8,99" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="diferencaCusto2">Diferença no Valor da Entrega:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="diferencaCusto2" readonly>
-                                </div>
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <label for="economiaBruta">ECONOMIA BRUTA:</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" class="form-control money" id="economiaBruta" value="0" readonly disabled>
                     </div>
                 </div>
-                <div class="col-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">3 KM</h6>
-                            <div class="form-group mb-2">
-                                <label for="custoAtual3">Custo Atual:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoAtual3" value="9,99">
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="custoEntregaLocal3">Custo Entrega Local:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoEntregaLocal3" value="9,99" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="diferencaCusto3">Diferença no Valor da Entrega:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="diferencaCusto3" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">4 KM</h6>
-                            <div class="form-group mb-2">
-                                <label for="custoAtual4">Custo Atual:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoAtual4" value="11,99">
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="custoEntregaLocal4">Custo Entrega Local:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoEntregaLocal4" value="11,99" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="diferencaCusto4">Diferença no Valor da Entrega:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="diferencaCusto4" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">5 KM</h6>
-                            <div class="form-group mb-2">
-                                <label for="custoAtual5">Custo Atual:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoAtual5" value="13,99">
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="custoEntregaLocal5">Custo Entrega Local:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoEntregaLocal5" value="13,99" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="diferencaCusto5">Diferença no Valor da Entrega:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="diferencaCusto5" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">6 KM</h6>
-                            <div class="form-group mb-2">
-                                <label for="custoAtual6">Custo Atual:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoAtual6" value="14,99">
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="custoEntregaLocal6">Custo Entrega Local:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoEntregaLocal6" value="14,99" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="diferencaCusto6">Diferença no Valor da Entrega:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="diferencaCusto6" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md-6 col-lg-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">7 KM</h6>
-                            <div class="form-group mb-2">
-                                <label for="custoAtual7">Custo Atual:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoAtual7" value="15,99">
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="custoEntregaLocal7">Custo Entrega Local:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="custoEntregaLocal7" value="15,99" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="diferencaCusto7">Diferença no Valor da Entrega:</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control money" id="diferencaCusto7" readonly>
-                                </div>
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <label for="economiaLiquida">ECONOMIA LÍQUIDA:</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">R$</span>
+                        <input type="text" class="form-control money" id="economiaLiquida" value="0" readonly disabled>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <footer class="mt-4">
-        <h6 class="p-3 text-center">&copy; 2024 loocal | todos os direitos reservados.</h6>
+        <h6 class="p-2 text-center">&copy; 2024 loocal | todos os direitos reservados.</h6>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
